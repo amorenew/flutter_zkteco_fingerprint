@@ -140,6 +140,7 @@ AAA=''');
     });
   }
 
+  bool isDeviceSupported;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -152,6 +153,17 @@ AAA=''');
             children: <Widget>[
               Column(
                 children: <Widget>[
+                  RaisedButton(
+                    onPressed: () async {
+                      bool isSupported = await ZkFinger.isDeviceSupported();
+                      setState(() {
+                        isDeviceSupported = isSupported;
+                        statusText = statusText +
+                            "Is zkteco Finger Print Supported: $isDeviceSupported";
+                      });
+                    },
+                    child: Text('Is Device Supported'),
+                  ),
                   RaisedButton(
                     onPressed: () async {
                       await ZkFinger.openConnection();
@@ -255,7 +267,7 @@ AAA=''');
         'assets/finger.svg',
         color: Colors.lime,
         width: 70,
-        height: 180,
+        height: 120,
       );
     }
     Color svgColor = Colors.black12;

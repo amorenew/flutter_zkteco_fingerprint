@@ -47,4 +47,8 @@ class ZkFinger {
   static Future<bool> clearFingerDatabase() async {
     return await _channel.invokeMethod('clear');
   }
+
+  static Future<bool> isDeviceSupported() async {
+    return await _channel.invokeMethod('isDeviceSupported');
+  }
 }

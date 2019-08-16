@@ -168,6 +168,17 @@ public class ZKFingerPrintHelper {
         }
     }
 
+//    public boolean isDeviceSupported() {
+//        boolean isSupported = true;
+//        try {
+//            FingerprintService.count();
+//        } catch (UnsatisfiedLinkError error) {
+//            Log.d("Zkteco FingerPrint", error.toString());
+//            isSupported = false;
+//        }
+//        return isSupported;
+//    }
+
     public void openConnection() {
         tryGetUsbPermission();
         // sharedPreferencesHelper = new SharedPreferencesHelper(this,"template");
@@ -328,71 +339,102 @@ public class ZKFingerPrintHelper {
         }
     }
 
-    // 获取USB权限//Get USB permissions
-    public void tryGetUsbPermission() {
-        mUsbPermissionActionReceiver = new BroadcastReceiver() {
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-                if (ACTION_USB_PERMISSION.equals(action)) {
-                    context.unregisterReceiver(this);// 解注册//Unregister
-                    synchronized (this) {
-                        UsbDevice usbDevice = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-                        if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-                            if (null != usbDevice) {
-                                Toast.makeText(mActivity, usbDevice.getDeviceName() + "get permission success",
+//    public boolean isDeviceSupported() {
+//        boolean isSupported = true;
+//        try {
+//            FingerprintService.count();
+//        } catch (UnsatisfiedLinkError error) {
+//            Log.d("Zkteco FingerPrint", error.toString());
+//            isSupported = false;
+//        }
+//        return isSupported;
+//    }
+
+    // check if zkteco Fingerprint Usb Device is supported
+    public boolean isDeviceSupported() {
+        return getFingerprintUsbDevice() != null;
+    }
+
+    public UsbDevice getFingerprintUsbDevice() {
+        Log.d("Zkteco FingerPrint", "start checking");
+
+        if (mUsbPermissionActionReceiver == null) {
+            mUsbPermissionActionReceiver = new BroadcastReceiver() {
+                public void onReceive(Context context, Intent intent) {
+                    String action = intent.getAction();
+                    if (ACTION_USB_PERMISSION.equals(action)) {
+                        context.unregisterReceiver(this);// 解注册//Unregister
+                        synchronized (this) {
+                            UsbDevice usbDevice = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+                            if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                                if (null != usbDevice) {
+                                    Toast.makeText(mActivity, usbDevice.getDeviceName() + "get permission success",
+                                            Toast.LENGTH_SHORT).show();
+                                    Log.e(TAG, usbDevice.getDeviceName() + "已获取USB权限");// Has obtained USB permissions
+                                    mFingerListener.onStatusChange(usbDevice.getDeviceName() + "get permission success",
+                                            FingerStatusType.FINGER_USB_PERMISSION_GRANTED, "", "");
+                                }
+                            } else {
+                                // user choose NO for your previously popup window asking for grant permission
+                                // for this usb device
+                                Toast.makeText(mActivity, "USB permission disagree，Permission denied for device",
                                         Toast.LENGTH_SHORT).show();
-                                Log.e(TAG, usbDevice.getDeviceName() + "已获取USB权限");// Has obtained USB permissions
-                                mFingerListener.onStatusChange(usbDevice.getDeviceName() + "get permission success",
-                                        FingerStatusType.FINGER_USB_PERMISSION_GRANTED, "", "");
+                                Log.e(TAG, "USB权限已被拒绝，Permission denied for device" + usbDevice);// USB permissions have
+                                // been denied
+                                mFingerListener.onStatusChange(
+                                        "USB permission disagree，Permission denied for device " + usbDevice.getDeviceName(),
+                                        FingerStatusType.FINGER_USB_PERMISSION_DENIED, "", "");
+
                             }
-                        } else {
-                            // user choose NO for your previously popup window asking for grant permission
-                            // for this usb device
-                            Toast.makeText(mActivity, "USB permission disagree，Permission denied for device",
-                                    Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "USB权限已被拒绝，Permission denied for device" + usbDevice);// USB permissions have
-                                                                                             // been denied
-                            mFingerListener.onStatusChange(
-                                    "USB permission disagree，Permission denied for device " + usbDevice.getDeviceName(),
-                                    FingerStatusType.FINGER_USB_PERMISSION_DENIED, "", "");
-
                         }
+
                     }
-
                 }
+            };
+
+            mUsbManager = (UsbManager) mActivity.getSystemService(Context.USB_SERVICE);
+
+            IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+
+            if (mUsbPermissionActionReceiver != null) {
+                mActivity.registerReceiver(mUsbPermissionActionReceiver, filter);
             }
-        };
-
-        mUsbManager = (UsbManager) mActivity.getSystemService(Context.USB_SERVICE);
-
-        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
-
-        if (mUsbPermissionActionReceiver != null) {
-            mActivity.registerReceiver(mUsbPermissionActionReceiver, filter);
         }
 
-        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(mActivity, 0, new Intent(ACTION_USB_PERMISSION),
-                0);
-
-        boolean has_idcard_usb = false;
+        UsbDevice zktecoFingerprintUsbDevice = null;
         for (final UsbDevice usbDevice : mUsbManager.getDeviceList().values()) {
 
             if (usbDevice.getVendorId() == 6997 && usbDevice.getProductId() == 289)// 身份证设备USB//ID card device USB
             {
-                has_idcard_usb = true;
-                Log.e(TAG, usbDevice.getDeviceName() + "已找到身份证USB");// ID card USB has been found
-                if (mUsbManager.hasPermission(usbDevice)) {
-                    Log.e(TAG, usbDevice.getDeviceName() + "已获取过USB权限");// Has obtained USB permissions
-                } else {
-                    Log.e(TAG, usbDevice.getDeviceName() + "请求获取USB权限");// Request for USB access
-                    mUsbManager.requestPermission(usbDevice, mPermissionIntent);
-                }
+                zktecoFingerprintUsbDevice = usbDevice;
+                break;
             }
 
         }
-
-        if (!has_idcard_usb) {
+        if (zktecoFingerprintUsbDevice == null) {
             Log.e(TAG, "未找到身份证USB");// ID card USB not found
+        }
+        return zktecoFingerprintUsbDevice;
+
+
+    }
+
+    // 获取USB权限//Get USB permissions
+    public void tryGetUsbPermission() {
+        UsbDevice fingerprintUsbDevice = getFingerprintUsbDevice();
+
+        if (fingerprintUsbDevice == null)
+            return;
+
+        PendingIntent mPermissionIntent = PendingIntent.getBroadcast(mActivity, 0, new Intent(ACTION_USB_PERMISSION),
+                0);
+
+        Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "已找到身份证USB");// ID card USB has been found
+        if (mUsbManager.hasPermission(fingerprintUsbDevice)) {
+            Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "已获取过USB权限");// Has obtained USB permissions
+        } else {
+            Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "请求获取USB权限");// Request for USB access
+            mUsbManager.requestPermission(fingerprintUsbDevice, mPermissionIntent);
         }
 
     }

@@ -3,8 +3,8 @@ package com.zkteco.zkfinger;
 import android.graphics.Bitmap;
 
 import com.zkteco.zkfinger.util.FingerListener;
-import com.zkteco.zkfinger.util.FingerStatusType;
 import com.zkteco.zkfinger.util.FingerStatus;
+import com.zkteco.zkfinger.util.FingerStatusType;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -42,6 +42,8 @@ public class ZkFingerPlugin implements MethodCallHandler, FingerListener {
             "register";
     private static final String METHOD_FINGER_CLEAR =
             "clear";
+    private static final String METHOD_FINGER_IS__DEVICE_SUPPORTED =
+            "isDeviceSupported";
 
     private static final String CHANNEL_FINGER_STATUS_CHANGE = "com.zkteco.zkfinger/status_change";
     private static final String CHANNEL_FINGER_IMAGE = "com.zkteco.zkfinger/finger_image";
@@ -178,6 +180,9 @@ public class ZkFingerPlugin implements MethodCallHandler, FingerListener {
             case METHOD_FINGER_CLEAR:
                 clearFinger();
                 break;
+            case METHOD_FINGER_IS__DEVICE_SUPPORTED:
+                isDeviceSupported();
+                break;
             default:
                 result.notImplemented();
         }
@@ -204,27 +209,37 @@ public class ZkFingerPlugin implements MethodCallHandler, FingerListener {
 
     private void startFingerListen(String userId) {
         zkFingerPrintHelper.startFingerSensor(userId);
+        result.success(true);
     }
 
     private void stopFingerListen() {
         zkFingerPrintHelper.stopFingerSensor();
-
+        result.success(true);
     }
 
     private void enrollFinger(String userId) {
         zkFingerPrintHelper.enrollFinger(userId);
+        result.success(true);
     }
 
     private void verifyFinger(String userId) {
         zkFingerPrintHelper.verifyFinger(userId);
+        result.success(true);
     }
 
     private void registerFinger(String userId, String fingerData) {
         zkFingerPrintHelper.register(userId, fingerData);
+        result.success(true);
     }
 
     private void clearFinger() {
         zkFingerPrintHelper.clear();
+        result.success(true);
+    }
+
+    private void isDeviceSupported() {
+        boolean isSupported = zkFingerPrintHelper.isDeviceSupported();
+        result.success(isSupported);
     }
 
 
