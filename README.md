@@ -2,7 +2,11 @@
 
 A new flutter plugin project.
 
-## Getting Started
+#### Pub Link:
+
+- https://pub.dev/packages/zk_finger/
+
+#### Getting Started
 
 This project is a starting point for a Flutter
 [plug-in package](https://flutter.dev/developing-packages/),
