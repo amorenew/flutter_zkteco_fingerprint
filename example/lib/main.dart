@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:zk_finger/finger_status.dart';
 import 'package:zk_finger/finger_status_type.dart';
 import 'package:zk_finger/zk_finger.dart';
+import 'package:serial_number/serial_number.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));
 
@@ -49,8 +50,11 @@ AAA=''');
     initPlatformState();
   }
 
+  String serialNumber;
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
+    serialNumber = await SerialNumber.serialNumber;
+    statusText = statusText + 'Serial Number: $serialNumber\n';
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
@@ -73,6 +77,7 @@ AAA=''');
 
   Uint8List fingerImages;
   String statusText = '';
+  String stringLengthBytes = '';
 
   FingerStatus fingerStatus;
   FingerStatusType tempStatusType;
@@ -126,6 +131,8 @@ AAA=''');
       verifiedId = fingerStatus.id + ' confirm';
       _biometricController.text = 'Current Confirm Index ${fingerStatus.data}';
     }
+    stringLengthBytes = 'Text Size: ${_biometricController.text.length} bytes';
+    statusText = statusText + stringLengthBytes + '\n';
   }
 
   void resetFieldsData() {
@@ -312,7 +319,7 @@ AAA=''');
       'assets/finger.svg',
       color: svgColor,
       width: 70,
-      height: 180,
+      height: 120,
     );
   }
 }
