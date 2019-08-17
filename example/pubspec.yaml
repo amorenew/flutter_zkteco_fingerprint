@@ -1,5 +1,5 @@
 name: zk_finger_example
-description: Demonstrates how to use the zk_finger plugin.
+description: the zk_finger plugin is used for supporting fingerprint device of zkecto with enrolling and verification feature.
 publish_to: "none"
 
 environment:
