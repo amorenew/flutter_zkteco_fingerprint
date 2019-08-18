@@ -179,11 +179,11 @@ public class ZKFingerPrintHelper {
 //        return isSupported;
 //    }
 
-    public void openConnection() {
+    public void openConnection(boolean isLogEnabled) {
         tryGetUsbPermission();
         // sharedPreferencesHelper = new SharedPreferencesHelper(this,"template");
         // Start fingerprint sensor
-        initFingerprintSensor();
+        initFingerprintSensor(isLogEnabled);
         // bind broadcast
         bindBroadcast();
         // this.mFingerListener.onStatusChange("ZK Finger open connection",
@@ -195,9 +195,11 @@ public class ZKFingerPrintHelper {
 
     }
 
-    public void initFingerprintSensor() {
+    public void initFingerprintSensor(boolean isLogEnabled) {
         // Define output log level
-        LogHelper.setLevel(Log.VERBOSE);
+        if (isLogEnabled)
+            LogHelper.setLevel(Log.VERBOSE);
+        else LogHelper.setLevel(10);
         // Start fingerprint sensor
         Map fingerprintParams = new HashMap();
         // set vid

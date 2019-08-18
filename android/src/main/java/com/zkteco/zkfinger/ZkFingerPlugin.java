@@ -157,7 +157,7 @@ public class ZkFingerPlugin implements MethodCallHandler, FingerListener {
                 result.success("Android " + android.os.Build.VERSION.RELEASE);
                 break;
             case METHOD_FINGER_OPEN_CONNECTION:
-                openConnection();
+                openConnection(isLogEnabled(call));
                 break;
             case METHOD_FINGER_CLOSE_CONNECTION:
                 closeConnection();
@@ -192,12 +192,16 @@ public class ZkFingerPlugin implements MethodCallHandler, FingerListener {
         return call.argument("id");
     }
 
+    private boolean isLogEnabled(MethodCall call) {
+        return call.argument("isLogEnabled");
+    }
+
     private String getFingerData(MethodCall call) {
         return call.argument("data");
     }
 
-    private void openConnection() {
-        zkFingerPrintHelper.openConnection();
+    private void openConnection(boolean isLogEnabled) {
+        zkFingerPrintHelper.openConnection(isLogEnabled);
         result.success(true);
     }
 

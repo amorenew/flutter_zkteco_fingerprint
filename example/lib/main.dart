@@ -173,7 +173,7 @@ AAA=''');
                   ),
                   RaisedButton(
                     onPressed: () async {
-                      await ZkFinger.openConnection();
+                      await ZkFinger.openConnection(isLogEnabled :false);
                     },
                     child: Text('Open Connection'),
                   ),

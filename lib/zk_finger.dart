@@ -14,8 +14,8 @@ class ZkFinger {
     return _channel.invokeMethod('getPlatformVersion');
   }
 
-  static Future<bool> openConnection() async {
-    return _channel.invokeMethod('openConnection');
+  static Future<bool> openConnection({bool isLogEnabled=true}) async {
+    return _channel.invokeMethod('openConnection', <String, bool>{'isLogEnabled': isLogEnabled});
   }
 
   static Future<bool> closeConnection() async {
