@@ -7,4 +7,12 @@ class FingerStatus {
   final FingerStatusType statusType;
   final String id;
   final String data;
+
+  
+  log() {
+    print('\nMessage: $message');
+    print('\nId: $id');
+    print('\nStatus: ${statusType}');
+    print('\nData: $data');
+  }
 }

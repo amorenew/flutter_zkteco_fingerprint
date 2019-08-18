@@ -1,6 +1,10 @@
+## 1.0.2
+
+* Add Log feature to finger status
+
 ## 1.0.1
 
-* Disable Log feature
+* Disable Log feature for hex string of finger data
 
 ## 1.0.0
 
