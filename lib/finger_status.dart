@@ -10,9 +10,10 @@ class FingerStatus {
 
   
   log() {
-    print('\nMessage: $message');
-    print('\nId: $id');
-    print('\nStatus: ${statusType}');
-    print('\nData: $data');
+    print('======Finger Status======');
+    print('Message: $message');
+    print('Id: $id');
+    print('Status: ${statusType}');
+    print('Data: $data');
   }
 }

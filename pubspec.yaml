@@ -1,6 +1,6 @@
 name: zk_finger
 description: The zk_finger plugin is used for supporting fingerprint device of zkecto with enrolling and verification feature.
-version: 1.0.2
+version: 1.0.3
 author: Amr Eniou <amorenew@gmail.com>
 homepage: https://github.com/amorenew/flutter_zkteco_fingerprint.git
 

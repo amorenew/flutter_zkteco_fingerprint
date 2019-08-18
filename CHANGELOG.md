@@ -1,3 +1,7 @@
+## 1.0.3
+
+* Improve Log feature to finger status
+
 ## 1.0.2
 
 * Add Log feature to finger status
