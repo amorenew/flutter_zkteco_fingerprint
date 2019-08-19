@@ -1,3 +1,7 @@
+## 1.0.8
+
+* Fix bug in permission
+
 ## 1.0.7
 
 * Improve logs
