@@ -276,13 +276,13 @@ public class ZKFingerPrintHelper {
         mFingerListener.onStatusChange("finger database cleared", FingerStatusType.FINGER_CLEARED, "", "");
 
     }
-
+    boolean hasPermission;
     public void startFingerSensor(String userId) {
         Log.d("Zkteco FingerPrint", "startFingerSensor");
 
         this.userId = userId;
 
-        boolean hasPermission = mUsbManager.hasPermission(getFingerprintUsbDevice());
+        //boolean hasPermission = mUsbManager.hasPermission(getFingerprintUsbDevice());
         if (!hasPermission) {
             mFingerListener.onStatusChange("No permission to start finger sensor", FingerStatusType.FINGER_USB_PERMISSION_ERROR, userId, "");
             return;
@@ -468,6 +468,7 @@ public class ZKFingerPrintHelper {
 
         Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "已找到身份证USB");// ID card USB has been found
         if (mUsbManager.hasPermission(fingerprintUsbDevice)) {
+            hasPermission=true;
             Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "已获取过USB权限");// Has obtained USB permissions
             mFingerListener.onStatusChange(fingerprintUsbDevice.getDeviceName() + "permission already granted success",
                     FingerStatusType.FINGER_USB_PERMISSION_ALREADY_GRANTED, "", "");

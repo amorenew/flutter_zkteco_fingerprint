@@ -1,3 +1,7 @@
+## 1.0.9
+
+* Fix bug in permission
+
 ## 1.0.8
 
 * Fix bug in permission
