@@ -1,3 +1,7 @@
+## 1.0.4
+
+* Fix bug: app crash if start finger sensor without permission
+
 ## 1.0.3
 
 * Improve Log feature to finger status

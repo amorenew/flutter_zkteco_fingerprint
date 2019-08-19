@@ -265,6 +265,13 @@ public class ZKFingerPrintHelper {
 
     public void startFingerSensor(String userId) {
         this.userId = userId;
+
+        boolean hasPermission = mUsbManager.hasPermission(getFingerprintUsbDevice());
+        if (!hasPermission) {
+            mFingerListener.onStatusChange("No permission to start finger sensor", FingerStatusType.FINGER_USB_PERMISSION_ERROR, userId, "");
+            return;
+        }
+
         try {
             if (bstart) {
                 mFingerListener.onStatusChange("already started", FingerStatusType.STARTED_ALREADY, "", "");
