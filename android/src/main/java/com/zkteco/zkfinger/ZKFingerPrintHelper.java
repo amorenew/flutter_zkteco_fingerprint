@@ -158,6 +158,8 @@ public class ZKFingerPrintHelper {
     private BroadcastReceiver mUsbPermissionActionReceiver;
 
     public ZKFingerPrintHelper(Activity mActivity, FingerListener mFingerListener) {
+        Log.d("Zkteco FingerPrint", "ZKFingerPrintHelper");
+
         this.mActivity = mActivity;
         this.mFingerListener = mFingerListener;
         // this.mFingerListener.onStatusChange("ZK Finger Print Helper created",
@@ -180,6 +182,8 @@ public class ZKFingerPrintHelper {
 //    }
 
     public void openConnection(boolean isLogEnabled) {
+        Log.d("Zkteco FingerPrint", "openConnection");
+
         tryGetUsbPermission();
         // sharedPreferencesHelper = new SharedPreferencesHelper(this,"template");
         // Start fingerprint sensor
@@ -196,6 +200,8 @@ public class ZKFingerPrintHelper {
     }
 
     public void initFingerprintSensor(boolean isLogEnabled) {
+        Log.d("Zkteco FingerPrint", "initFingerprintSensor");
+
         // Define output log level
         if (isLogEnabled)
             LogHelper.setLevel(Log.VERBOSE);
@@ -222,6 +228,8 @@ public class ZKFingerPrintHelper {
     }
 
     public void bindBroadcast() {
+        Log.d("Zkteco FingerPrint", "bindBroadcast");
+
         fingerprintTemplateReveiver = new FingerprintTemplateReveiver();
         intentFilter = new IntentFilter();
         intentFilter.addAction(BroadContanst.FINGERPRINT_TEMPLATE_ACTION);
@@ -229,6 +237,8 @@ public class ZKFingerPrintHelper {
     }
 
     public void closeConnection() {
+        Log.d("Zkteco FingerPrint", "closeConnection");
+
         // Destroy fingerprint sensor when it's not used
         FingerprintFactory.destroy(fingerprintSensor);
         if (fingerprintTemplateReveiver != null) {
@@ -244,6 +254,8 @@ public class ZKFingerPrintHelper {
     }
 
     public void register(String userId, String fingerData) {
+        Log.d("Zkteco FingerPrint", "register");
+
         byte[] bytes = new byte[0];
         try {
             bytes = CompressUtil.uncompressString(fingerData);
@@ -258,12 +270,16 @@ public class ZKFingerPrintHelper {
     }
 
     public void clear() {
+        Log.d("Zkteco FingerPrint", "clear");
+
         FingerprintService.clear();
         mFingerListener.onStatusChange("finger database cleared", FingerStatusType.FINGER_CLEARED, "", "");
 
     }
 
     public void startFingerSensor(String userId) {
+        Log.d("Zkteco FingerPrint", "startFingerSensor");
+
         this.userId = userId;
 
         boolean hasPermission = mUsbManager.hasPermission(getFingerprintUsbDevice());
@@ -301,6 +317,8 @@ public class ZKFingerPrintHelper {
     }
 
     public void stopFingerSensor() {
+        Log.d("Zkteco FingerPrint", "stopFingerSensor");
+
         try {
             if (bstart) {
                 // stop capture
@@ -320,6 +338,8 @@ public class ZKFingerPrintHelper {
     }
 
     public void enrollFinger(String userId) {
+        Log.d("Zkteco FingerPrint", "enrollFinger");
+
         this.userId = userId;
         if (bstart) {
             byte[] temp = new byte[2048];
@@ -339,6 +359,8 @@ public class ZKFingerPrintHelper {
     }
 
     public void verifyFinger(String userId) {
+        Log.d("Zkteco FingerPrint", "verifyFinger");
+
         this.userId = userId;
         if (bstart) {
             isRegister = false;
@@ -361,11 +383,13 @@ public class ZKFingerPrintHelper {
 
     // check if zkteco Fingerprint Usb Device is supported
     public boolean isDeviceSupported() {
+        Log.d("Zkteco FingerPrint", "isDeviceSupported");
+
         return getFingerprintUsbDevice() != null;
     }
 
     public UsbDevice getFingerprintUsbDevice() {
-        Log.d("Zkteco FingerPrint", "start checking");
+        Log.d("Zkteco FingerPrint", "getFingerprintUsbDevice");
 
         if (mUsbPermissionActionReceiver == null) {
             mUsbPermissionActionReceiver = new BroadcastReceiver() {
@@ -430,6 +454,8 @@ public class ZKFingerPrintHelper {
 
     // 获取USB权限//Get USB permissions
     public void tryGetUsbPermission() {
+        Log.d("Zkteco FingerPrint", "tryGetUsbPermission");
+
         UsbDevice fingerprintUsbDevice = getFingerprintUsbDevice();
 
         if (fingerprintUsbDevice == null)

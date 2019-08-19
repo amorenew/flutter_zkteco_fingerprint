@@ -1,5 +1,9 @@
 ## 1.0.6
 
+* Improve logs
+
+## 1.0.6
+
 * Add status when permission already granted
 
 ## 1.0.5
