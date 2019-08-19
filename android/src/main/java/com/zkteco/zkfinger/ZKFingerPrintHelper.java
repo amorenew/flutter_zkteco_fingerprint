@@ -44,13 +44,13 @@ public class ZKFingerPrintHelper {
     FingerprintTemplateReveiver fingerprintTemplateReveiver;
     IntentFilter intentFilter;
     SharedPreferencesHelper sharedPreferencesHelper;
+    UsbDevice zktecoFingerprintUsbDevice;
     private FingerprintSensor fingerprintSensor = null;
     private boolean isRegister = false;
     private int uid = 1;
     private String userId = "";
     private byte[][] regtemparray = new byte[3][2048]; // register template buffer array
     private int enrollidx = 0;
-
     private FingerListener mFingerListener;
     private Activity mActivity;
     final FingerprintCaptureListener listener = new FingerprintCaptureListener() {
@@ -157,6 +157,17 @@ public class ZKFingerPrintHelper {
     private boolean bstart = false;
     private BroadcastReceiver mUsbPermissionActionReceiver;
 
+//    public boolean isDeviceSupported() {
+//        boolean isSupported = true;
+//        try {
+//            FingerprintService.count();
+//        } catch (UnsatisfiedLinkError error) {
+//            Log.d("Zkteco FingerPrint", error.toString());
+//            isSupported = false;
+//        }
+//        return isSupported;
+//    }
+
     public ZKFingerPrintHelper(Activity mActivity, FingerListener mFingerListener) {
         Log.d("Zkteco FingerPrint", "ZKFingerPrintHelper");
 
@@ -169,17 +180,6 @@ public class ZKFingerPrintHelper {
             mFingerListener.onStatusChange(s, FingerStatusType.MOUNTED, "", "");
         }
     }
-
-//    public boolean isDeviceSupported() {
-//        boolean isSupported = true;
-//        try {
-//            FingerprintService.count();
-//        } catch (UnsatisfiedLinkError error) {
-//            Log.d("Zkteco FingerPrint", error.toString());
-//            isSupported = false;
-//        }
-//        return isSupported;
-//    }
 
     public void openConnection(boolean isLogEnabled) {
         Log.d("Zkteco FingerPrint", "openConnection");
@@ -358,6 +358,17 @@ public class ZKFingerPrintHelper {
         }
     }
 
+//    public boolean isDeviceSupported() {
+//        boolean isSupported = true;
+//        try {
+//            FingerprintService.count();
+//        } catch (UnsatisfiedLinkError error) {
+//            Log.d("Zkteco FingerPrint", error.toString());
+//            isSupported = false;
+//        }
+//        return isSupported;
+//    }
+
     public void verifyFinger(String userId) {
         Log.d("Zkteco FingerPrint", "verifyFinger");
 
@@ -370,17 +381,6 @@ public class ZKFingerPrintHelper {
         }
     }
 
-//    public boolean isDeviceSupported() {
-//        boolean isSupported = true;
-//        try {
-//            FingerprintService.count();
-//        } catch (UnsatisfiedLinkError error) {
-//            Log.d("Zkteco FingerPrint", error.toString());
-//            isSupported = false;
-//        }
-//        return isSupported;
-//    }
-
     // check if zkteco Fingerprint Usb Device is supported
     public boolean isDeviceSupported() {
         Log.d("Zkteco FingerPrint", "isDeviceSupported");
@@ -390,7 +390,9 @@ public class ZKFingerPrintHelper {
 
     public UsbDevice getFingerprintUsbDevice() {
         Log.d("Zkteco FingerPrint", "getFingerprintUsbDevice");
-
+        if (zktecoFingerprintUsbDevice != null) {
+            return zktecoFingerprintUsbDevice;
+        }
         if (mUsbPermissionActionReceiver == null) {
             mUsbPermissionActionReceiver = new BroadcastReceiver() {
                 public void onReceive(Context context, Intent intent) {
@@ -434,7 +436,7 @@ public class ZKFingerPrintHelper {
             }
         }
 
-        UsbDevice zktecoFingerprintUsbDevice = null;
+
         for (final UsbDevice usbDevice : mUsbManager.getDeviceList().values()) {
 
             if (usbDevice.getVendorId() == 6997 && usbDevice.getProductId() == 289)// 身份证设备USB//ID card device USB
@@ -468,7 +470,7 @@ public class ZKFingerPrintHelper {
         if (mUsbManager.hasPermission(fingerprintUsbDevice)) {
             Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "已获取过USB权限");// Has obtained USB permissions
             mFingerListener.onStatusChange(fingerprintUsbDevice.getDeviceName() + "permission already granted success",
-                    FingerStatusType.FINGER_USB_PERMISSION_GRANTED, "", "");
+                    FingerStatusType.FINGER_USB_PERMISSION_ALREADY_GRANTED, "", "");
         } else {
             Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "请求获取USB权限");// Request for USB access
             mUsbManager.requestPermission(fingerprintUsbDevice, mPermissionIntent);
