@@ -441,6 +441,8 @@ public class ZKFingerPrintHelper {
         Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "已找到身份证USB");// ID card USB has been found
         if (mUsbManager.hasPermission(fingerprintUsbDevice)) {
             Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "已获取过USB权限");// Has obtained USB permissions
+            mFingerListener.onStatusChange(fingerprintUsbDevice.getDeviceName() + "permission already granted success",
+                    FingerStatusType.FINGER_USB_PERMISSION_GRANTED, "", "");
         } else {
             Log.e(TAG, fingerprintUsbDevice.getDeviceName() + "请求获取USB权限");// Request for USB access
             mUsbManager.requestPermission(fingerprintUsbDevice, mPermissionIntent);

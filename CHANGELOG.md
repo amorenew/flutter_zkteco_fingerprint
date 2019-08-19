@@ -1,3 +1,7 @@
+## 1.0.6
+
+* Add status when permission already granted
+
 ## 1.0.5
 
 * Add new enum value FINGER_USB_PERMISSION_ERROR
