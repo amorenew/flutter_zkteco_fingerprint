@@ -24,6 +24,7 @@ enum FingerStatusType {
   //Fingerprint USB Permission
   FINGER_USB_PERMISSION_GRANTED,
   FINGER_USB_PERMISSION_DENIED,
+  FINGER_USB_PERMISSION_ERROR,
   //Save or clear the finger data
   FINGER_REGISTERED,
   FINGER_CLEARED

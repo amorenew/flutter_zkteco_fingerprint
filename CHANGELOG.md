@@ -1,3 +1,7 @@
+## 1.0.5
+
+* Add new enum value FINGER_USB_PERMISSION_ERROR
+
 ## 1.0.4
 
 * Fix bug: app crash if start finger sensor without permission
