@@ -14,8 +14,9 @@ class ZkFinger {
     return _channel.invokeMethod('getPlatformVersion');
   }
 
-  static Future<bool?> openConnection({bool isLogEnabled=true}) async {
-    return _channel.invokeMethod('openConnection', <String, bool>{'isLogEnabled': isLogEnabled});
+  static Future<bool?> openConnection({bool isLogEnabled = true}) async {
+    return _channel.invokeMethod(
+        'openConnection', <String, bool>{'isLogEnabled': isLogEnabled});
   }
 
   static Future<bool?> closeConnection() async {
@@ -23,7 +24,8 @@ class ZkFinger {
   }
 
   static Future<bool?> startListen({String? userId}) async {
-    return _channel.invokeMethod('startListen', <String, String?>{'id': userId});
+    return _channel
+        .invokeMethod('startListen', <String, String?>{'id': userId});
   }
 
   static Future<bool?> stopListen() async {
@@ -38,7 +40,8 @@ class ZkFinger {
     return _channel.invokeMethod('verify', <String, String?>{'id': userId});
   }
 
-  static Future<bool?> registerFinger({String? userId, String? dataBase64}) async {
+  static Future<bool?> registerFinger(
+      {String? userId, String? dataBase64}) async {
     final bool? success = await _channel.invokeMethod(
         'register', <String, String?>{'id': userId, 'data': dataBase64});
     return success;

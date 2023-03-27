@@ -8,7 +8,6 @@ class FingerStatus {
   final String id;
   final String data;
 
-  
   log() {
     print('======Finger Status======');
     print('Message: $message');

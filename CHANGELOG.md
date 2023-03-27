@@ -1,5 +1,9 @@
 ## 2.0.0
 
+* Clean up
+
+## 2.0.0
+
 * Migrate to null safety
 
 ## 1.0.10
