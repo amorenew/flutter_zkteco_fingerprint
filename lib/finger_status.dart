@@ -13,7 +13,7 @@ class FingerStatus {
     print('======Finger Status======');
     print('Message: $message');
     print('Id: $id');
-    print('Status: ${statusType}');
+    print('Status: $statusType');
     print('Data: $data');
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -8,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:zk_finger/finger_status.dart';
 import 'package:zk_finger/finger_status_type.dart';
 import 'package:zk_finger/zk_finger.dart';
-import 'package:serial_number/serial_number.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));
 
@@ -18,7 +15,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  String? _platformVersion = 'Unknown';
 
   TextEditingController _registerationCodeController =
       TextEditingController(text: "DEVD6586");
@@ -41,8 +38,8 @@ mOhG7/Z6FtQxcVwS25kBBr+zVUipyaQqoUooEv1aTFc7i2MaTF2oLBRw6UaNov7XkJOK1DNPGmbS
 aqWYYtUga+q3Rp6unX9UUH0MwlcNFh7blLkWXcUWbtPRMlvC8GwJB0NxGVasWLHi/+dfvq8JzgAI
 AAA=''');
 
-  String score;
-  String verifiedId;
+  String? score;
+  String? verifiedId;
 
   @override
   void initState() {
@@ -50,12 +47,9 @@ AAA=''');
     initPlatformState();
   }
 
-  String serialNumber;
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    serialNumber = await SerialNumber.serialNumber;
-    statusText = statusText + 'Serial Number: $serialNumber\n';
-    String platformVersion;
+    String? platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await ZkFinger.platformVersion;
@@ -75,12 +69,12 @@ AAA=''');
     });
   }
 
-  Uint8List fingerImages;
+  Uint8List? fingerImages;
   String statusText = '';
   String stringLengthBytes = '';
 
-  FingerStatus fingerStatus;
-  FingerStatusType tempStatusType;
+  FingerStatus? fingerStatus;
+  FingerStatusType? tempStatusType;
 
   void updateStatus(dynamic value) {
     Map<dynamic, dynamic> statusMap = value as Map<dynamic, dynamic>;
@@ -100,36 +94,36 @@ AAA=''');
       setState(() {
         setBiometricBase64TextField();
         statusText = statusText +
-            fingerStatus.statusType.toString() +
+            fingerStatus!.statusType.toString() +
             " Id: " +
-            fingerStatus.id +
+            fingerStatus!.id +
             '\n';
       });
     }
   }
 
   void setBiometricBase64TextField() {
-    if (fingerStatus.statusType == FingerStatusType.ENROLL_SUCCESS) {
+    if (fingerStatus!.statusType == FingerStatusType.ENROLL_SUCCESS) {
       resetFieldsData();
-      _biometricController.text = fingerStatus.data;
-      verifiedId = fingerStatus.id + ' enroll';
-    } else if (fingerStatus.statusType ==
+      _biometricController.text = fingerStatus!.data;
+      verifiedId = fingerStatus!.id + ' enroll';
+    } else if (fingerStatus!.statusType ==
         FingerStatusType.ENROLL_ALREADY_EXIST) {
       resetFieldsData();
-      score = fingerStatus.data;
-      verifiedId = fingerStatus.id + ' already enrolled';
-    } else if (fingerStatus.statusType == FingerStatusType.VERIFIED_SUCCESS) {
+      score = fingerStatus!.data;
+      verifiedId = fingerStatus!.id + ' already enrolled';
+    } else if (fingerStatus!.statusType == FingerStatusType.VERIFIED_SUCCESS) {
       resetFieldsData();
-      verifiedId = fingerStatus.id + ' verified';
-      score = fingerStatus.data;
-    } else if (fingerStatus.statusType == FingerStatusType.FINGER_REGISTERED) {
+      verifiedId = fingerStatus!.id + ' verified';
+      score = fingerStatus!.data;
+    } else if (fingerStatus!.statusType == FingerStatusType.FINGER_REGISTERED) {
       resetFieldsData();
-      verifiedId = fingerStatus.id + ' register';
-      _biometricController.text = fingerStatus.data;
-    } else if (fingerStatus.statusType == FingerStatusType.ENROLL_CONFIRM) {
+      verifiedId = fingerStatus!.id + ' register';
+      _biometricController.text = fingerStatus!.data;
+    } else if (fingerStatus!.statusType == FingerStatusType.ENROLL_CONFIRM) {
       resetFieldsData();
-      verifiedId = fingerStatus.id + ' confirm';
-      _biometricController.text = 'Current Confirm Index ${fingerStatus.data}';
+      verifiedId = fingerStatus!.id + ' confirm';
+      _biometricController.text = 'Current Confirm Index ${fingerStatus!.data}';
     }
     stringLengthBytes = 'Text Size: ${_biometricController.text.length} bytes';
     statusText = statusText + stringLengthBytes + '\n';
@@ -147,7 +141,7 @@ AAA=''');
     });
   }
 
-  bool isDeviceSupported;
+  bool? isDeviceSupported;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -160,68 +154,156 @@ AAA=''');
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      elevation: 5,
+                      padding: const EdgeInsets.all(12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
                     onPressed: () async {
-                      bool isSupported = await ZkFinger.isDeviceSupported();
+                      bool? isSupported = await ZkFinger.isDeviceSupported();
                       setState(() {
                         isDeviceSupported = isSupported;
                         statusText = statusText +
                             "Is zkteco Finger Print Supported: $isDeviceSupported";
                       });
                     },
-                    child: Text('Is Device Supported'),
+                    child: Text(
+                      'Is Device Supported',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      elevation: 5,
+                      padding: const EdgeInsets.all(12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
                     onPressed: () async {
-                      await ZkFinger.openConnection(isLogEnabled :false);
+                      await ZkFinger.openConnection(isLogEnabled: false);
                     },
-                    child: Text('Open Connection'),
+                    child: Text(
+                      'Open Connection',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      elevation: 5,
+                      padding: const EdgeInsets.all(12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
                     onPressed: () async {
                       await ZkFinger.startListen(
                           userId: _registerationCodeController.text);
                     },
-                    child: Text('Start Listening'),
+                    child: Text(
+                      'Start Listening',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      elevation: 5,
+                      padding: const EdgeInsets.all(12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
                     onPressed: () async {
                       await ZkFinger.enroll(
                           userId: _registerationCodeController.text);
                     },
-                    child: Text('Enroll Finger'),
+                    child: Text(
+                      'Enroll Finger',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      elevation: 5,
+                      padding: const EdgeInsets.all(12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
                     onPressed: () async {
                       await ZkFinger.verify(
                           userId: _registerationCodeController.text);
                     },
-                    child: Text('Verify Finger'),
+                    child: Text(
+                      'Verify Finger',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      elevation: 5,
+                      padding: const EdgeInsets.all(12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
                     onPressed: () async {
                       await ZkFinger.clearFingerDatabase();
                     },
-                    child: Text('Clear finger\nDatabase'),
+                    child: Text(
+                      'Clear finger\nDatabase',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      elevation: 5,
+                      padding: const EdgeInsets.all(12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
                     onPressed: () async {
                       await ZkFinger.stopListen();
                     },
-                    child: Text('Stop Listening'),
+                    child: Text(
+                      'Stop Listening',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      elevation: 5,
+                      padding: const EdgeInsets.all(12.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
                     onPressed: () async {
                       await ZkFinger.closeConnection();
                     },
-                    child: Text('Close Connection'),
+                    child: Text(
+                      'Close Connection',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                   _getFingerStatusImage()
                 ],
               ),
               fingerImages != null
                   ? Image.memory(
-                      fingerImages,
+                      fingerImages!,
                       width: MediaQuery.of(context).size.width * .2,
                       height: double.infinity,
                       fit: BoxFit.contain,
@@ -247,13 +329,24 @@ AAA=''');
                         style: TextStyle(fontSize: 14, color: Colors.blue)),
                     Text('Verified Id: $verifiedId',
                         style: TextStyle(fontSize: 14, color: Colors.blue)),
-                    RaisedButton(
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        elevation: 5,
+                        padding: const EdgeInsets.all(12.0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
                       onPressed: () async {
                         await ZkFinger.registerFinger(
                             userId: _registerationCodeController.text,
                             dataBase64: _biometricController.text);
                       },
-                      child: Text('Register User Biometric Base64 Data'),
+                      child: Text(
+                        'Register User Biometric Base64 Data',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
@@ -278,7 +371,7 @@ AAA=''');
       );
     }
     Color svgColor = Colors.black12;
-    switch (fingerStatus.statusType) {
+    switch (fingerStatus!.statusType) {
       case FingerStatusType.STARTED_ALREADY:
       case FingerStatusType.STARTED_SUCCESS:
         svgColor = Colors.blue;

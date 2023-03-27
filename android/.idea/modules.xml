@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/zk_finger.iml" filepath="$PROJECT_DIR$/zk_finger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zk_finger.iml" filepath="$PROJECT_DIR$/.idea/modules/zk_finger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zk_finger.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/zk_finger.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zk_finger.main.iml" filepath="$PROJECT_DIR$/.idea/modules/zk_finger.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/zk_finger.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/zk_finger.unitTest.iml" />
     </modules>
   </component>
 </project>

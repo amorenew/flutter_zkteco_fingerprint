@@ -1,3 +1,7 @@
+## 2.0.0
+
+* Migrate to null safety
+
 ## 1.0.10
 
 * Fix bug in gradle
