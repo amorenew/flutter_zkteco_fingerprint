@@ -4,7 +4,8 @@ version: 2.0.0
 homepage: https://github.com/amorenew/flutter_zkteco_fingerprint.git
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
+  flutter: ">=1.12.0"
 
 dependencies:
   flutter:
@@ -16,5 +17,7 @@ dev_dependencies:
 
 flutter:
   plugin:
-    androidPackage: com.zkteco.zkfinger
-    pluginClass: ZkFingerPlugin
+    platforms:
+      android:
+        package: com.zkteco.zkfinger
+        pluginClass: ZkFingerPlugin
